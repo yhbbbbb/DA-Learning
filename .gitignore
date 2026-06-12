@@ -1,0 +1,16 @@
+# Data files
+data/*.csv
+data/*.db
+data/*.sqlite
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
