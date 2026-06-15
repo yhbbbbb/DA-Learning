@@ -5,7 +5,8 @@
 -- ============================================================
 
 -- 1. 创建原始数据表
-CREATE TABLE IF NOT EXISTS user_behavior (
+CREATE TABLE IF NOT EXISTS user_behavior ( 
+    --如果表已存在就跳过，不会报错。这是一种安全写法，防止重复执行时出错
     user_id       INT,
     item_id       INT,
     category_id   INT,
@@ -47,12 +48,13 @@ SELECT
         WHEN 'fav'   THEN '收藏'
         WHEN 'cart'  THEN '加购'
         WHEN 'buy'   THEN '购买'
-    END AS behavior_name,
-    COUNT(*) AS count,
+    END AS behavior_name, --行为类型翻译，方便阅读
+    COUNT(*) AS count, -- 计数
     ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM user_behavior), 2) AS percentage
+    --用"该行为数量 ÷ 总行为数量 × 100"算出百分比，ROUND(..., 2) 保留两位小数
 FROM user_behavior
-GROUP BY behavior_type
-ORDER BY count DESC;
+GROUP BY behavior_type  --分组排序
+ORDER BY count DESC;  --按行为类型分组，按数量从高到低排列
 
 -- ============================================================
 -- 按日期的行为分布
@@ -60,11 +62,12 @@ ORDER BY count DESC;
 
 SELECT
     FROM_UNIXTIME(timestamp, '%Y-%m-%d') AS date,
+    --把 Unix 时间戳（如 1511624400）转成可读日期
     behavior_type,
     COUNT(*) AS count
 FROM user_behavior
-GROUP BY date, behavior_type
-ORDER BY date, behavior_type;
+GROUP BY date, behavior_type --双维度分组
+ORDER BY date, behavior_type;--先按日期升序，同一天内再按行为类型排序
 
 -- ============================================================
 -- 按小时的行为分布（识别高峰时段）
