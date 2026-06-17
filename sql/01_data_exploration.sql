@@ -99,8 +99,10 @@ SELECT
     user_id, item_id, category_id, behavior_type, timestamp,
     COUNT(*) AS duplicate_count
 FROM user_behavior
+--GROUP BY — 全字段分组
 GROUP BY user_id, item_id, category_id, behavior_type, timestamp
-HAVING COUNT(*) > 1
+HAVING COUNT(*) > 1 --筛选重复
+--ORDER BY + LIMIT — 取最严重的 10 条
 ORDER BY duplicate_count DESC
 LIMIT 10;
 
